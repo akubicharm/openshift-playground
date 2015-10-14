@@ -18,7 +18,7 @@
         {
             "description": "The name for the application.",
             "name": "APPLICATION_NAME",
-            "value": "eap-app",
+            "value": "eapapp",
             "required": true
         },
         {
