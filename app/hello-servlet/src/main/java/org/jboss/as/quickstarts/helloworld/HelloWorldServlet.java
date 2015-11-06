@@ -18,6 +18,7 @@ package org.jboss.as.quickstarts.helloworld;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
