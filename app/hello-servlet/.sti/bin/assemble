@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [-d $LOCAL_SOURCE_DIR/modules ] ; then
+    echo "Copying module from project ..."
+    cp -vr $LOCAL_SOURCE_DIR/modules/* $JBOSS_HOME/modules
+fi
+
+exit 0
