@@ -78,8 +78,10 @@ public class HelloWorldServlet extends HttpServlet {
     		}
     	}
     	catch (Exception ex) {
-    		msg = "Get message failed.";
-    		ex.printStackTrace();
+		StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+    		ex.printStackTrace(pw);
+                msg = sw.toString();
     	}
     	return msg;
     }
