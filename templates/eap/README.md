@@ -36,9 +36,9 @@ oc new-app --template=my-eap6-ext-mysql-s2i \
 --param=DB_PASSWORD=dbpass
 ```
 
-DB_DATABASE is same as MYSQL_DATABASE
-DB_USERNAME is same as MYSQL_USER
-DB_PASSWORD is same as MYSQL_PASSWORD
+*DB_DATABASE is same as MYSQL_DATABASE
+*DB_USERNAME is same as MYSQL_USER
+*DB_PASSWORD is same as MYSQL_PASSWORD
 
 ### Note
 `openshift-launcher.sh` is able to create two type of datasources. One is TX managed datasource, another is normal datasource.
@@ -51,6 +51,9 @@ The configuration of the datasources are primarily controlled by two environment
 
 #### TX_DATABASE_PREFIX_MAPPING
 `TX_DATABASE_PREFIX_MAPPING='eapapp-mysql=DB'`
+
+
+![Datasource settings](datasource_settings.png)
 
 
 ### ISSUES
