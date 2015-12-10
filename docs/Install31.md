@@ -246,6 +246,7 @@ STIビルドなどで作成した Docker Image を保持するためのDocker Re
 
 ## スケジューリングの有効化
 インストール直後は、masterサーバはスケジューリング不可（Podのデプロイ不可）になっているので、スケジューリング可能にします。
+
     [vagrant@ose3-master ~]# oadm manage-node master --schedulable=true
 
 
@@ -258,20 +259,24 @@ STIビルドなどで作成した Docker Image を保持するためのDocker Re
 
 
 レプリカ数を1にして、Podをデプロイします。
+
     [vagrant@ose3-master ~]# oc scale rc docker-registry-1 --replicas=1 
 
 Podのステータスが Running になっていることを確認します。
+
     [vagrant@ose3-master ~]# oc get pods
     NAME                      READY     STATUS    RESTARTS   AGE
     docker-registry-1-gp1qt   1/1       Running   0          10h
 
 
 デプロイ用のPodを確認して、削除します。
+
     [vagrant@ose3-master ~]# oc get pods |grep deploy
     [vagrant@ose3-master ~]# oc delete pod docker-registry-1-deploy
 
 
 ## Router の作成
+
     [vagrant@ose3-master ~]# sudo oadm router   --selector="region=infra" --config=/etc/origin/master/admin.kubeconfig --credentials=/etc/origin/master/openshift-router.kubeconfig   --images='registry.access.redhat.com/openshift3/ose-${component}:${version}' --replicas=1 --service-account=router
 
 
@@ -305,5 +310,9 @@ PodのステータスがRunningになっていることを確認します。
     routingConfig:
     subdomain:  "apps.example.com"
 
-    [vagrant@ose3-master ~]#
+
+# 利用者の追加
+
+    [vagrant@ose3-master ~]# htpasswd -b /etc/origin/openshift-htpasswd joe redhat
+
 
