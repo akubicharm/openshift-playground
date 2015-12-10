@@ -188,6 +188,10 @@ Docker Storageの設定をする場合は、マニュアルを参照してくだ
     [vagrant@ose3-master ~]# atomic-openshift-installer -u install
 
 
+### 注意
+kubernetes-client を削除しないと、パッケージがコンフリクトして atomic-openshift-installer でのインストールが失敗します。
+
+
 ## ノードの確認
     [vagrant@ose3-master ~]# oc get nodes
     NAME                LABELS                                              STATUS                     AGE
