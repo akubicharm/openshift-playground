@@ -281,6 +281,7 @@ Podのステータスが Running になっていることを確認します。
 
 
 レプリカ数を1にして、Podをデプロイします。
+
     [vagrant@ose3-master ~]# oc scale rc router-1 --replicas=1
 
 PodのステータスがRunningになっていることを確認します。
