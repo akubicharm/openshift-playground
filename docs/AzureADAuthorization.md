@@ -20,6 +20,7 @@ OpenShiftへのログインの流れは以下のようになります。
 - Microsoft Azure Active Directoryのログイン画面へリダイレクト
 - Microsoft Azure Activve Directoryにてユーザ認証しトークンを付与
 - OpenShiftマスタサーバへのログイン完了
+
 ![OAuth2.0での認証の流れ](images/ADAuthStructure02.png)
 
 
@@ -32,6 +33,7 @@ https://youtu.be/0hGVXSUMIwc
 ###1.Microsoft AzureのポータルでActive Directoryを新規構築
 
 新規リソース作成で、「セキュリティ + ID」 ==> 「Active Directory」を選択します。
+
 ![ADサービスの作成](images/ADCreateAzureAD-1.png)
 
 ###2.ディレクトリ追加
@@ -95,10 +97,12 @@ OpenShiftのユーザ認証に利用するDirectoryを作成します。
 
 ####ウィザード3: 一時パスワードの取得
 「作成」ボタンをクリックし、表示されたパスワードの文字列をコピーしておきます。
+
 ![ユーザプロファイル](images/ADCreateUser03.png)
 
 ####アプリケーションの割り当て
 Active Directory管理下のアプリケーションOpenShiftを作成したdemouser01に割り当てます。
+
 ![アプリケーション割り当て](images/ADAssignAppToUser.png)
 
 
@@ -109,16 +113,20 @@ OpenShiftの認証機能を設定するための情報を、Microsoft Azure Acti
 
 ####(1)ディレクトリの一覧から、OpenShiftのディレクトリを選択
 OpenShiftの認証用に作成した「ose」というディレクトリを選択します。
+
 ![ディレクトリ選択](images/ADShowConfig01.png)
 
 ####(2)アプリケーションビューを選択
+
 ![アプリケーション選択](images/ADShowConfig02.png)
 
 ####(3)アプリケーション一覧からOpenShiftを選択
 アプリケーション一覧から「OpenShift」を選択します。
+
 ![OpenShiftを選択](images/ADShowConfig03.png)
 
 ####(4)構成ビューを選択
+
 ![構成ビューを選択](images/ADShowConfig04.png)
 
 ####(5)クライアントIDとキーの確認
@@ -129,10 +137,12 @@ OpenShiftの認証設定に必要なクライアントID(clientID)とキー(clie
 
 ####(6)エンドポイントの確認
 画面下部の「エンドポイントの表示」をクリックし、エンドポイントビューを表示します。　
+
 ![エンドポイントの確認](images/ADShowConfig06.png)
 
 ####(7)OAUTH2.0トークンエンドポイントと承認エンドポイントを確認
 OpenShiftの認証設定に必要な、OAuth2.0トークンエンドポイント(urls.token)とOAuth2.0認証エンドポイント(urls.authorize)を確認します。
+
 ![アプリケーションのエンドポイントの確認](images/ADShowConfig07.png)
 
 
