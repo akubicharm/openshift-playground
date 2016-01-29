@@ -138,6 +138,7 @@ OpenShiftの認証設定に必要な、OAuth2.0トークンエンドポイント
 
 ###5.OpenShiftの認証設定の変更
 認証方式の変更はマスターサーバの `/etc/origin/master-config.yaml`を編集します。
+編集後、`systemctl restart atomic-openshift-master` で、再起動します。
 
 
 ```
