@@ -153,7 +153,7 @@ Red Hat Container Development KitのVagrantイメージを利用している場�
 
 
 ---
-# OpenShiftのインストール
+# OpenShiftのインストール(RPM)
 
 ## インストール設定ファイルの作成
 インストールを実行するユーザのホームディレクトリの配下にインストール設定用のファイルを準備しておくと、簡単にインストールができます。
@@ -299,9 +299,9 @@ STIビルドなどで作成した Docker Image を保持するためのDocker Re
 ### security context constraint(SCC)の確認
 OpenShift内部でDocker Imageを保持するレジストリと、アプリケーションの名前解決をするためのルーティング用のSCCがあることを確認します。
     [vagrant@master ~]# oc export scc privileged
-users:
-- system:serviceaccount:default:registry
-- system:serviceaccount:default:router
+    users:
+    - system:serviceaccount:default:registry
+    - system:serviceaccount:default:router
   
 
 ### registry 作成
@@ -310,14 +310,15 @@ Persistent Volume を利用する場合は、https://access.redhat.com/documenta
 Registoryがインフラ用ノードにデプロイされるように、　`--selector="region=infra"` と指定します。
 
     [vagrant@master ~]# sudo mkdir -p /registry
+    [vagrant@master ~]# sudo chmod 777 /registry
     [vagrant@master ~]# sudo oadm registry \
---service-account=registry \
---config=/etc/origin/master/admin.kubeconfig \
---credentials=/etc/origin/master/openshift-registry.kubeconfig \ 
---images='registry.access.redhat.com/openshift3/ose-${component}:${version}'  \
---mount-host=/registry \
---selector="region=infra" \ 
---replicas=1 
+    --service-account=registry \
+    --config=/etc/origin/master/admin.kubeconfig \
+    --credentials=/etc/origin/master/openshift-registry.kubeconfig \ 
+    --images='registry.access.redhat.com/openshift3/ose-${component}:${version}'  \
+    --mount-host=/registry \
+    --selector="region=infra" \ 
+    --replicas=1 
 
 Podのステータスが Running になっていることを確認します。
 
@@ -328,16 +329,16 @@ Podのステータスが Running になっていることを確認します。
 
 ### Router の作成
     [vagrant@master ~]# sudo oadm router --dry-run \
---credentials=/etc/origin/master/openshift-router.kubeconfig \
---service-account=router
+    --credentials=/etc/origin/master/openshift-router.kubeconfig \
+    --service-account=router
 
     [vagrant@master ~]# sudo oadm router \
---credentials=/etc/origin/master/openshift-router.kubeconfig \
---service-account=router \
---selector="region=infra" \
---config=/etc/origin/master/admin.kubeconfig \
---images='registry.access.redhat.com/openshift3/ose-${component}:${version}' \
---replicas=1
+    --credentials=/etc/origin/master/openshift-router.kubeconfig \
+    --service-account=router \
+    --selector="region=infra" \
+    --config=/etc/origin/master/admin.kubeconfig \
+    --images='registry.access.redhat.com/openshift3/ose-${component}:${version}' \
+    --replicas=1
 
 PodのステータスがRunningになっていることを確認します。
 
