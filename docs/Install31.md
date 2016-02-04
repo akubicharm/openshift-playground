@@ -21,10 +21,10 @@ https://access.redhat.com/documentation/en/openshift-enterprise/3.1/installation
 
 ※インストールガイドでは、Master サーバをインフラ用 Node としても利用しています。
 
-このインストール手順書では、 Quick Install を利用して インストールすることを前提としています。
-この方式でインストールした場合、ユーザ認証は設定されませんので、後から設定します。
-認証方式の変更は https://access.redhat.com/documentation/en/openshift-enterprise/3.1/installation-and-configuration/chapter-5-configuring-authentication を参照してください。
+## インストール方式
+OpenShift のインストール方法は Quick Install とAdvanced Install の2種類あります。Quick Installでは、Master/NodeのIPアドレスなどの情報を指定し、細かな設定は行いません。Advanced Install では、認証方式、Nodeのラベル設定など様々な設定もInstall時に行うことができ、また HA 構成でのインストールも可能です。
 
+このインストール手順書では、 シンプルな構成を Quick Install を利用して構築することを前提とします。
 
 ## OS インストール
 OpenShift 3 のインストールには Red Hat Enterprise Linux 7.1 以上が必要です。
@@ -95,6 +95,8 @@ Red Hat Container Development Kit の box イメージは、kubernetes のパッ
 * 実行ユーザ: vagrant
 * 実行サーバ: Master、Node 全て
 
+
+    [vagrant@xxx ~]# sudo subscription-manager register --username $RHN_USERNAME --password $RHN_PASSWORD
     [vagrant@xxx ~]# sudo subscription-manager attach --pool $RHN_POOLID
     [vagrant@xxx ~]# sudo subscription-manager repos --disable="*";
     [vagrant@xxx ~]# sudo subscription-manager repos \
@@ -106,7 +108,7 @@ Red Hat Container Development Kit の box イメージは、kubernetes のパッ
 
 
 ## パッケージのインストール
-* 実行ユーザ：vaagrant
+* 実行ユーザ：vagrant
 * 実行サーバ：Master、Node 全て
 
 ## 必要なパッケージのインストールとアップデート
@@ -156,10 +158,12 @@ Red Hat Container Development KitのVagrantイメージを利用している場�
 # OpenShiftのインストール(RPM)
 
 ## インストール設定ファイルの作成
-インストールを実行するユーザのホームディレクトリの配下にインストール設定用のファイルを準備しておくと、簡単にインストールができます。
+インストールを実行するユーザのホームディレクトリの配下(~/.config/openshift/)にインストール設定用のファイルを準備しておくと、簡単にインストールができます。
 v3.1.1 からは、`atomic-openshift-master`, `atomic-openshift-node` をコンテナで実行することも可能になりましたが、ここでは従来のrpmでインストールするため、`containerized: false`  とします。
+ose3-master.example.comは、Master サーバとしての機能(atomic-openshift-master)とNodeサーバとしてインフラ用のコンテナ(Docker Registory、HAProxy)を動作させるので、`master: true`、`node: true`とします。また、pubic_hostname は、管理用のWebUIとして公開するホスト名なのでDNSなどで名前解決できるホスト名とします。
 
-    [~/.config/openshift/installer.cfg.yml]
+[~/.config/openshift/installer.cfg.yml]
+
     version: v1 
     variant: openshift-enterprise
     variant_version: 3.1
@@ -189,22 +193,28 @@ v3.1.1 からは、`atomic-openshift-master`, `atomic-openshift-node` をコン�
 
 
 ## インストーラの実行
+上記で作成した`~/.config/openshift/installer.cfg.yml`から設定を読み込んでインストールを実施します。
+
+
     [vagrant@master ~]# atomic-openshift-installer -u install
 
 
-インストールが終わると、`.config/openshift/installer.cfg.yml`にインストーラが生成したAnsibleのコンフィグファイルの保存場所が`ansible_config`という属性で追記されています。
+インストールが終わると、`.config/openshift/installer.cfg.yml`が少し更新されており、インストーラが生成したAnsibleのコンフィグファイルの保存場所が`ansible_config`という属性で追記されています。
 
 
 ## ノードの確認
+インストールが完了したら、Node が稼働していることを確認します。
+
+
     [vagrant@master ~]# oc get nodes
     NAME                LABELS                                                   STATUS                     AGE
-    ose3-master.example.com  kubernetes.io/hostname=ose3-master.example.com                Ready,SchedulingDisabled   10h
+    ose3-master.example.com  kubernetes.io/hostname=ose3-master.example.com      Ready,SchedulingDisabled   10h
     node01.example.com  kubernetes.io/hostname=node01.example.com                Ready                      10h
     node02.example.com  kubernetes.io/hostname=node02.example.com                Ready                      10h
 
 
 ## ラベルの付与
-Node にラベルが付いていない場合は、ラベルを付与します。
+Node の役割を示すラベルが付いていない場合は、ラベルを付与します。
 
 |ノード|ラベル|
 |---|---|
@@ -213,7 +223,7 @@ Node にラベルが付いていない場合は、ラベルを付与します。
 |node02|region=primary,zone=west|
 
 
-各ノードにラベルが付与されていない場合は、ラベルを付与します。
+
     [vagrant@master ~]$ oc label node ose3-master.example region=infra zone=default
     [vagrant@master ~]$ oc label node ose3-node01.example.com region=primary zone=east
     [vagrant@master ~]$ oc label node ose3-node02.example.com region=primary zone=west
@@ -235,8 +245,12 @@ Node にラベルが付いていない場合は、ラベルを付与します。
 
 ## ユーザ認証方式の変更
 クイックインストールの場合は、ユーザ認証方式が設定されず deny_all になっているので、誰も使えません。HTPasswd認証ができるように変更します。
+認証方式の変更は https://access.redhat.com/documentation/en/openshift-enterprise/3.1/installation-and-configuration/chapter-5-configuring-authentication を参照してください。
 
 ### httpd-tool のインストール
+htpasswd を利用するため、httpd-tool をインストールします。
+
+
     [vagrant@master]# sudo yum install -y httpd-tools
 
 
@@ -246,6 +260,9 @@ Node にラベルが付いていない場合は、ラベルを付与します。
 
 ### ユーザ登録
     [vagrant@master]# sudo htpasswd -b /etc/origin/openshift-passwd joe redhat
+
+
+HTPasswd での認証が有効となるように/etc/origin/master/master-config.yaml を編集します。
 
 
 変更前
@@ -298,6 +315,8 @@ STIビルドなどで作成した Docker Image を保持するためのDocker Re
 
 ### security context constraint(SCC)の確認
 OpenShift内部でDocker Imageを保持するレジストリと、アプリケーションの名前解決をするためのルーティング用のSCCがあることを確認します。
+
+
     [vagrant@master ~]# oc export scc privileged
     users:
     - system:serviceaccount:default:registry
@@ -362,9 +381,3 @@ PodのステータスがRunningになっていることを確認します。
 
     routingConfig:
     subdomain:  "apps.example.com"
-
-
-### 利用者の追加
-    [vagrant@master ~]# htpasswd -b /etc/origin/openshift-htpasswd joe redhat
-
-
