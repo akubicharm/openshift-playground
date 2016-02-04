@@ -15,13 +15,24 @@ OpenShiftは複数の認証方式を指定して利用することができま�
 
 ![サーバの構成](images/ADAuthStructure01.png)
 
-OpenShiftへのログインの流れは以下のようになります。
+## ログイン仕組み
+
 1. ユーザが OpenShift のマスターサーバへアクセス
 - Microsoft Azure Active Directoryのログイン画面へリダイレクト
 - Microsoft Azure Activve Directoryにてユーザ認証しトークンを付与
 - OpenShiftマスタサーバへのログイン完了
 
 ![OAuth2.0での認証の流れ](images/ADAuthStructure02.png)
+
+
+CLI でログインする場合は、`--token`オプションを否定する必要があります。
+ブラウザで https://<OPENSHIFT_MASTER_URL>:8443/oauth/token/request にアクセスし、Token を確認します。
+Log in with this Token に表示された通りにコマンドを入力すると、CLIでのログインも可能になります。
+![CLIでのログイン](images/ADOAuthToken.png)
+
+
+
+
 
 
 ## ログインしているところの動画
@@ -71,7 +82,7 @@ OpenShiftのユーザ認証に利用するDirectoryを作成します。
 |アプリケーションID/URI|https://OPENSHIFT_MASTER_URL:8443
 
 
-###3.ユーザ追加
+###4.ユーザ追加
 ユーザ追加のウィザードでユーザを追加します。
 
 ####ウィザード1: このユーザに関する情報の入力
@@ -108,7 +119,7 @@ Active Directory管理下のアプリケーションOpenShiftを作成したdemo
 
 ---
 ## OpenShiftの設定
-###4.Microsoft Azure Active Directoryの接続情報の確認
+###5.Microsoft Azure Active Directoryの接続情報の確認
 OpenShiftの認証機能を設定するための情報を、Microsoft Azure Active Directoryの構成画面で確認します。
 
 ####(1)ディレクトリの一覧から、OpenShiftのディレクトリを選択
@@ -146,7 +157,7 @@ OpenShiftの認証設定に必要な、OAuth2.0トークンエンドポイント
 ![アプリケーションのエンドポイントの確認](images/ADShowConfig07.png)
 
 
-###5.OpenShiftの認証設定の変更
+###6.OpenShiftの認証設定の変更
 認証方式の変更はマスターサーバの `/etc/origin/master-config.yaml`を編集します。
 編集後、`systemctl restart atomic-openshift-master` で、再起動します。
 
