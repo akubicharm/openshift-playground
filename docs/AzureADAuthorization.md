@@ -26,7 +26,7 @@ OpenShiftは複数の認証方式を指定して利用することができま�
 
 
 CLI でログインする場合は、`--token`オプションを否定する必要があります。
-ブラウザで https://<OPENSHIFT_MASTER_URL>:8443/oauth/token/request にアクセスし、Token を確認します。
+ブラウザで `https://<OPENSHIFT_MASTER_URL>:8443/oauth/token/request` にアクセスし、Token を確認します。
 Log in with this Token に表示された通りにコマンドを入力すると、CLIでのログインも可能になります。
 ![CLIでのログイン](images/ADOAuthToken.png)
 
@@ -189,7 +189,7 @@ oauthConfig:
       urls:
         authorize: https://login.microsoftonline.com/<Object ID>/oauth2/authorize ← Active Directoryエンドポイントの「OAUTH2.0承認エンドポイント」
         token: https://login.microsoftonline.com/<Object ID>/oauth2/token ← Active Directoryエン>ドポイントの「OAUTH2.0トークンエンドポイント」
-  masterPublicURL: https://<OpenShift Master Server URL>:8443
+  masterPublicURL: https://OpenShift Master Server URL:8443
 ```
 
 参考
