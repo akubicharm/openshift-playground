@@ -1,7 +1,7 @@
 # OpenShift v3 の認証を Windows Azure Active Directory で実現
 
 ## はじめに
-OpenShiftは複数の認証方式を指定して利用することができます。ここではMicrosoft Azure Active Directoryを利用したOAuth2.0の認証の仕組みの設定方法をご紹介します。
+OpenShiftは複数の認証方式を指定して利用することができます。ここではMicrosoft Azure Active Directoryを利用したOpenID Connectでの認証の仕組みの設定方法をご紹介します。
 
 ## 前提条件
 * OpenShift v3がインストール済みであること
@@ -192,5 +192,21 @@ oauthConfig:
   masterPublicURL: https://OpenShift Master Server URL:8443
 ```
 
-参考
-https://azure.microsoft.com/ja-jp/documentation/articles/active-directory-application-objects/
+#参考
+[1] https://azure.microsoft.com/ja-jp/documentation/articles/active-directory-application-objects/
+[2] https://azure.microsoft.com/ja-jp/documentation/articles/active-directory-authentication-scenarios/
+[3] http://openid-foundation-japan.github.io/rfc6750.ja.html
+
+#用語説明
+* クライアントID
+  アプリケーションの登録時にAzure ADによって生成されるアプリケーションのIDです。認証コードまたはトークンを要求すると、認証時にクライアントIDとキーがAzureADに送信されます。 
+
+* キー
+  Web APIを呼び出すためにAzure ADに対して認証する時に、クライアントIDと共に送信されるキーです。
+
+* Bearer Token（署名なしトークン）
+  セキュリティトークン。トークンを所有する任意のパーティ（持参人=beaer)は、「トークンを所有している」という条件を満たしさせすればそのトークンを利用することができる。署名なしトークンを利用する際、持参人は、暗号鍵の所持を照明(proof-of-prosession)をするよう要求されない。
+
+* JWT (JSON Web Token)
+
+
