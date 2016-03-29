@@ -1,0 +1,29 @@
+tomcat:
+  image: registry.access.redhat.com/jboss-webserver-3/webserver30-tomcat8-openshift:latest
+  ports:
+    - "8080:8080"
+  volumes:
+    - ~/work/github/openshift-quickstarts:/tmp:ro
+  environment:
+    - DB_SERVICE_PREFIX_MAPPING=jws-app-mongodb=DB 
+    - JWS_APP_MONGODB_SERVICE_HOST=mongodb
+    - JWS_APP_MONGODB_SERVICE_PORT=27017 
+    - DB_USERNAME=dbuser 
+    - DB_PASSWORD=dbpass 
+    - DB_DATABASE=root 
+    - DB_ADMIN_PASSWORD=adminpass 
+    - JWS_ADMIN_USERNAME=jwsadmin 
+    - JWS_ADMIN_PASSWORD=jwspass 
+  links:
+    - mongodb
+
+mongodb:
+  image: registry.access.redhat.com/rhscl/mongodb-26-rhel7:latest
+  ports:
+    - "27017:27017"
+  environment:
+    - MONGODB_USER=dbuser 
+    - MONGODB_PASSWORD=dbpass 
+    - MONGODB_DATABASE=root 
+    - MONGODB_ADMIN_PASSWORD=adminpass 
+    - VIRTUAL_HOST="mongodb"
