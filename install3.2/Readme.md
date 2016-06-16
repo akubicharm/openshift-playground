@@ -6,6 +6,16 @@ Vagrant の box イメージは、Docker Storage Pool の設定もされてい�
 Red Hat Enterprise Linux 7.2 のbox イメージのダウンロードはこちら。 https://access.redhat.com/downloads/content/293/ver=2/rhel---7/2.0.0/x86_64/product-software
 
 Product Variantで`Red Hat Container Development Kit (latest)`を選択してください。
+
+### CDKを利用するためのサブスクリプション
+Red Hat 製品を、開発者が個人利用を目的として利用できる Red Hat Developer Subscription を利用すると、CDKが利用できるようになります。 <https://www.redhat.com/ja/about/press-releases/rhjapan-red-hat-expands-red-hat-developer-program-no-cost-red-hat-enterprise-linux-developer-subscription>
+
+### Red Hat Developer Subscription の利用登録
+Red Hat Developers のサイト <http://developers.redhat.com/>で登録後、
+カスタマポータル<https://access.redhat.com>から製品をダウンロードできるようになります。
+30分くらいは時間かかるので、登録したらコーヒーでも飲んで一息ついてから、トライしてみてください。
+
+
 ## 構成
 ラップトップでの利用を想定し、Master x 1 台、Node x 1 台の最小構成とします。
 Hypervisor には Virtualbox を利用します。
@@ -20,6 +30,8 @@ vagrant box add <box ファイル名>
 
 ### Vagrant ファイルの編集
 NAT と ホストオンリーネットワークを構成します。ホストオンリーネットワークのIPアドレスは適宜変更してください。
+
+初回起動時は、auto_config: true とし、2回目以降は auto_config: false としてください。
 
 ```
     master.vm.network :private_network, ip: "192.168.31.11", auto_config: false
