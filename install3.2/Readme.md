@@ -34,7 +34,7 @@ NAT と ホストオンリーネットワークを構成します。ホストオ
 初回起動時は、auto_config: true とし、2回目以降は auto_config: false としてください。
 
 ```
-    master.vm.network :private_network, ip: "192.168.31.11", auto_config: false
+    master.vm.network :private_network, ip: "192.168.32.11", auto_config: false
 ```
 
 
@@ -42,6 +42,12 @@ DNSはホストOSの設定を引き継げるように virtualbox.customize に�
 ```
       virtualbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 ```
+
+### Subscription情報ファイルの作成
+`vagrant-provision.sh`, `install.sh` で利用する Red Hat Networkのユーザー名、パスワード、プールIDをファイルに保存します。
+* rhn-username : Red Hat Networkのユーザー名。例）ose@example.com
+* rhn-password : Red Hat Networkのパスワード
+* rhn-poolid : Red Hat NetworkのPoolID
 
 
 ### 仮想OSの起動
@@ -59,11 +65,6 @@ vagrant-provision.sh node01
 ```
 
 ### install.sh の編集
-Subscriptionを有効するために利用する、ユーザ名、パスワード、プールIDを編集します。
-```
-vagrant ssh $svr --command "sudo subscription-manager register --username=<RHN_USER> --password=<RHN_PASSWORD>"
-vagrant ssh $svr --command "sudo subscription-manager attach --pool <POOL_ID>"
-```
 IPアドレスを変更した場合は、`install.sh`スクリプトでも利用しているIPアドレスを変更します。
 
 ### OpenShift のインストール
