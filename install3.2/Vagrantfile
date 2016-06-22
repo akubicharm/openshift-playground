@@ -1,8 +1,11 @@
+# $kuma3Kei~
+# 8a85f9874011071c01407da00b997cb2
+# komizo@redhat.com
+
 Vagrant.configure(2) do |config|
   config.vm.define "master" do |master|
-    master.vm.provision "shell", path: "vagrant-provision.sh", args: "master"
     master.vm.box = "cdk-7.2-23"
-    master.vm.network :private_network, ip: "192.168.31.11", auto_config: false
+    master.vm.network :private_network, ip: "192.168.32.11", auto_config: false
     master.vm.provider "virtualbox" do |virtualbox|
       virtualbox.memory =4096
       virtualbox.cpus = 2
@@ -12,8 +15,7 @@ Vagrant.configure(2) do |config|
   end
   config.vm.define "node01" do |node01|
     node01.vm.box = "cdk-7.2-23"
-    node01.vm.provision "shell", path: "vagrant-provision.sh", args: "node01"
-    node01.vm.network :private_network, ip: "192.168.31.21", auto_config: false
+    node01.vm.network :private_network, ip: "192.168.32.21", auto_config: false
     node01.vm.provider "virtualbox" do |virtualbox|
       virtualbox.memory =4096
       virtualbox.cpus = 2

@@ -7,6 +7,24 @@ RHSM_USERNAME=$(cat $DIRNAME/rhn-username)
 RHSM_PASSWORD=$(cat $DIRNAME/rhn-password)
 RHSM_POOLID=$(cat $DIRNAME/rhn-poolid)
 
+# config Network Interface
+
+cat << EOF >> netconfig.sh
+ETH0_HWADDR=\$(/usr/sbin/ip a | grep -A1 eth0 | grep link | cut -d' ' -f6)
+sudo sh -c "cat << EOM >> /etc/sysconfig/network-scripts/ifcfg-eth0
+HWADDR=\$ETH0_HWADDR
+EOM"
+sudo systemctl restart network
+EOF
+
+
+scp ./netconfig.sh vagrant@192.168.32.11:/tmp/netconfig.sh
+scp ./netconfig.sh vagrant@192.168.32.21:/tmp/netconfig.sh
+
+for svr in $SERVERS ; do
+echo $svr
+vagrant ssh $svr --command "sudo /bin/bash /tmp/netconfig.sh"
+done
 
 # config docker
 for svr in $SERVERS ; do
@@ -24,7 +42,7 @@ vagrant ssh $svr --command "sudo yum -y update"
 vagrant ssh $svr --command "sudo yum -y install atomic-openshift-utils"
 vagrant ssh $svr --command "sudo yum -y erase kubernetes kubernetes-client kubernetes-master kubernetes-node"
 vagrant ssh $svr --command "sudo -c 'echo 192.168.32.11 master.192.168.32.11.xip.io >> /etc/hosts'"
-vagrant ssh $svr --command "sudo -c 'echo 192.168.32.21 node01.192.168.32.11.xip.io >> /etc/hosts''"
+vagrant ssh $svr --command "sudo -c 'echo 192.168.32.21 node01.192.168.32.21.xip.io >> /etc/hosts'"
 done
 
 vagrant ssh master --command "ssh-keygen; ssh-copy-id -i ~/.ssh/id_rsa.pub node01.192.168.32.21.xip.io; ssh-copy-id -i ~/.ssh/id_rsa.pub master.192.168.32.11.xip.io"
@@ -78,4 +96,4 @@ vagrant ssh master --command "sudo oadm registry --service-account=registry     
 
 vagrant ssh master --command "sudo oadm router --service-account=router  --config='/etc/origin/master/admin.kubeconfig'"
 
-vagrant ssh master --command "oadm manage-node master.192.168.32.11.xip.io --schedulable=false"
+echo "after verify running Docker Registr and Router, execute the following command. oadm manage-node master.192.168.32.11.xip.io --schedulable=false"
