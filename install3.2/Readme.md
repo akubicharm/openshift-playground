@@ -88,3 +88,9 @@ chown 1001:root /registry
 ```
 
 `master`サーバ以外でDocker RegistryのPodを実行する場合は、適切な仮想サーバでディレクトリのオーナーを変更します。
+
+## ユーザ登録
+インストール時にhtpasswdでの認証を利用するように設定しているので、htpasswdコマンドでユーザを追加します。
+```
+htpasswd -b /etc/origin/master/htpasswd <user> <password>
+```
