@@ -1,7 +1,3 @@
-# $kuma3Kei~
-# 8a85f9874011071c01407da00b997cb2
-# komizo@redhat.com
-
 Vagrant.configure(2) do |config|
   config.vm.define "master" do |master|
     master.vm.box = "cdk-7.2-23"
