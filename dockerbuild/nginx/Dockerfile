@@ -9,6 +9,7 @@ ENV NGINX_VERSION 1.6
 # RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 RUN chown -R 1001:root /opt/rh/nginx16/root
+RUN cat /usr/local/etc/nginx/nginx.conf | sed -e's/8080/80/g' > /usr/local/etc/nginx/nginx.conf
 
 # VOLUME ["/var/cache/nginx"]
 
