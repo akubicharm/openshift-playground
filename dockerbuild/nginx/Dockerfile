@@ -8,7 +8,7 @@ ENV NGINX_VERSION 1.6
 # RUN ln -sf /dev/stdout /var/log/nginx/access.log
 # RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
-RUN chmod 777 /opt/rh/nginx16/root/etc/nginx
+RUN chown -R 1001:root /opt/rh/nginx16/root
 
 # VOLUME ["/var/cache/nginx"]
 
