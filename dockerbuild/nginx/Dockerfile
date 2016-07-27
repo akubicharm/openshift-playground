@@ -1,6 +1,6 @@
-M registry.access.redhat.com/rhel7:latest
+FROM registry.access.redhat.com/rhel7:latest
 
-MAINTAINER NGINX Docker Maintainers "docker-maint@nginx.com"
+MAINTAINER NGINX Kei Omizo <komizo@redhat.com>
 
 ENV NGINX_VERSION 1.9.2-1.el7.ngx
 
