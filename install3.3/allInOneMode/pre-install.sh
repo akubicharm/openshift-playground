@@ -1,6 +1,6 @@
-#!/bin/bash
+d!/bin/bash
 set -x
-
+DIRNAME=$(dirname $0)
 echo "PARAMETERS"
 echo "USERNAME=$USER"
 echo "ROUTEREXTIP=$(cat $DIRNAME/routerextip)"
