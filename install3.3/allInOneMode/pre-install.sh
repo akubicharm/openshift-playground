@@ -85,16 +85,16 @@ ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
 
 sudo htpasswd -cb /etc/origin/master/htpasswd joe redhat
 
-oadm policy add-role-to-user system:registry reguser
-sudo oadm registry \
-    --selector="region=infra" \
-    --config=/etc/origin/master/admin.kubeconfig \
-    --credentials=/etc/origin/master/openshift-registry.kubeconfig \
-    --images='registry.access.redhat.com/openshift3/ose-\${component}:\${version}' \
-    --replicas=1 \
-    --service-account=registry \
-    --mount-host=/registry
-
+#oadm policy add-role-to-user system:registry reguser
+#sudo oadm registry \
+#    --selector="region=infra" \
+#    --config=/etc/origin/master/admin.kubeconfig \
+#    --credentials=/etc/origin/master/openshift-registry.kubeconfig \
+#    --images='registry.access.redhat.com/openshift3/ose-\${component}:\${version}' \
+#    --replicas=1 \
+#    --service-account=registry \
+#    --mount-host=/registry
+#
 #oadm router \
 #    --selector="region=infra" \
 #    --config=/etc/origin/master/admin.kubeconfig \
