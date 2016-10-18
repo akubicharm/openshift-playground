@@ -1,8 +1,11 @@
-d!/bin/bash
+#!/bin/bash
+#
+# EDIF USERNAME BEFORE EXECUTE THIS SCRIPT
+#
 set -x
 DIRNAME=$(dirname $0)
 echo "PARAMETERS"
-USERNAME=komizo
+USERNAME=
 ROUTEREXTIP=$(cat $DIRNAME/routerextip)
 RHSM_USERNAME=$(cat $DIRNAME/rhn-username)
 RHSM_PASSWORD=$(cat $DIRNAME/rhn-password)
