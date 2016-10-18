@@ -2,27 +2,27 @@ d!/bin/bash
 set -x
 DIRNAME=$(dirname $0)
 echo "PARAMETERS"
-echo "USERNAME=$USER"
-echo "ROUTEREXTIP=$(cat $DIRNAME/routerextip)"
-echo "RHSM_USERNAME=$(cat $DIRNAME/rhn-username)"
-echo "RHSM_PASSWORD=$(cat $DIRNAME/rhn-password)"
-echo "RHSM_POOLID=$(cat $DIRNAME/rhn-poolid)"
+USERNAME=komizo
+ROUTEREXTIP=$(cat $DIRNAME/routerextip)
+RHSM_USERNAME=$(cat $DIRNAME/rhn-username)
+RHSM_PASSWORD=$(cat $DIRNAME/rhn-password)
+RHSM_POOLID=$(cat $DIRNAME/rhn-poolid)
 
 
 #
 # create ssh key
 #
-ssh-keygen
-ssh-copy-id -i ~/.ssh/id_rsa.pub localhost
+#ssh-keygen
+#ssh-copy-id -i ~/.ssh/id_rsa.pub localhost
 
 
 #
 # subscribe
 #
-subscription-manager register --username=$RHSM_USERNAME --password=$RHSM_PASSWORD
-subscription-manager attach --pool $RHSM_POOLID
-subscription-manager repos --disable=*
-subscription-manager repos \
+sudo subscription-manager register --username=$RHSM_USERNAME --password=$RHSM_PASSWORD
+sudo subscription-manager attach --pool $RHSM_POOLID
+sudo subscription-manager repos --disable=*
+sudo subscription-manager repos \
          --enable=rhel-7-server-rpms \
          --enable=rhel-7-server-extras-rpms \
          --enable=rhel-7-server-ose-3.3-rpms
@@ -30,25 +30,26 @@ subscription-manager repos \
 #
 # yum install
 #
-yum -y update
-yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion docker-1.10.3
+sudo yum -y update
+sudo yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion docker-1.10.3
 
-yum install -y atomic-openshift-utils
+sudo yum install -y atomic-openshift-utils
 
 
 #
 # config docker
 #
-sed -i -e "s#^OPTIONS='--selinux-enabled'#OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'#" /etc/sysconfig/docker
+#cp /etc/sysconfig/docker{,.back}
+#sed -i -e "s^OPTIONS='--selinux-enabled'OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'#" /etc/sysconfig/docker
                                                                                          
-cat <<EOF > /etc/sysconfig/docker-storage-setup
-DEVS=/dev/sdc
-VG=docker-vg
-EOF
+#cat <<EOF > /etc/sysconfig/docker-storage-setup
+#DEVS=/dev/sdc
+#VG=docker-vg
+#EOF
 
-docker-storage-setup                                                                                                                                    
-systemctl enable docker
-systemctl start docker
+#docker-storage-setup                                                                                                                                    
+sudo systemctl enable docker
+sudo systemctl start docker
 
 
 
@@ -79,6 +80,9 @@ mkdir -p /etc/origin/master
 sudo htpasswd -cb /etc/origin/master/htpasswd ${USERNAME} ${PASSWORD}
 
 
+
+
+
 cat <<EOF > /home/${USERNAME}/openshift-install.sh
 export ANSIBLE_HOST_KEY_CHECKING=False
 ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
@@ -94,7 +98,7 @@ sudo htpasswd -cb /etc/origin/master/htpasswd joe redhat
 #    --replicas=1 \
 #    --service-account=registry \
 #    --mount-host=/registry
-#
+
 #oadm router \
 #    --selector="region=infra" \
 #    --config=/etc/origin/master/admin.kubeconfig \
