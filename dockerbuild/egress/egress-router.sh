@@ -18,6 +18,8 @@ fi
 # The pod may die and get restarted; only try to add the
 # address/route/rules if they are not already there.
 if ! ip route get ${EGRESS_DESTINATION} | grep -q macvlan0; then
+    # added by kay
+    ip link add link eth0 name macvlan0 type macvlan
     ip addr add ${EGRESS_SOURCE}/16 dev macvlan0
     ip link set up dev macvlan0
     ip route add ${EGRESS_GATEWAY}/16 dev macvlan0
