@@ -14,4 +14,4 @@ RUN curl -sLo  /tmp/oc.tar.gz https://github.com/openshift/origin/releases/downl
 
 USER 1010:1010
 
-CMD ["/usr/local/bin/oc"]
+CMD ["/usr/bin/bash"]
