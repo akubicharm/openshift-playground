@@ -7,8 +7,6 @@ ENV OC_VERSION=v1.3.0 \
     BUILD_DEPS='curl tar gzip' \
     RUN_DEPS='ca-certificates gettext'
 
-openshift-origin-client-tools-v1.3.0-3ab7af3d097b57f933eccef684a714f2368804e7-linux-64bi
-
 RUN curl -sLo  /tmp/oc.tar.gz https://github.com/openshift/origin/releases/download/v1.3.0/openshift-origin-client-tools-v1.3.0-3ab7af3d097b57f933eccef684a714f2368804e7-linux-64bit.tar.gz &&\
     tar xvf /tmp/oc.tar.gz -C /tmp/ &&\
     mv /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc /usr/local/bin/ && \
