@@ -12,6 +12,6 @@ RUN curl -sLo  /tmp/oc.tar.gz https://github.com/openshift/origin/releases/downl
     mv /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc /usr/local/bin/ && \
     rm -fr /tmp/oc.tar.gz 
 
-USER 1000:1000
+USER 1010:1010
 
-CMD ["/usr/bin/bash"]
+CMD ["/usr/local/bin/oc"]
