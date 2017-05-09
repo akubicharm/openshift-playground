@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/rhscl/nginx-16-rhel7:latest
+FROM registry.access.redhat.com/rhscl/nginx-110-rhel7:latest
 
 MAINTAINER NGINX Kei Omizo <komizo@redhat.com>
 
@@ -8,7 +8,7 @@ ENV NGINX_VERSION 1.6
 # RUN ln -sf /dev/stdout /var/log/nginx/access.log
 # RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
-RUN chown -R 1001:root /opt/rh/nginx16/root
+RUN chown -R 1001:root /opt/rh/nginx110/root
 RUN cat /usr/local/etc/nginx/nginx.conf | sed -e's/8080/80/g' > /usr/local/etc/nginx/nginx.conf
 
 # VOLUME ["/var/cache/nginx"]
