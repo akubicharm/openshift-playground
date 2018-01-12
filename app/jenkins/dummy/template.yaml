@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: jenkins-dummy
+metadata:
+  name: jenkins-dummy
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: jenkins-dummy
+  spec:
+    triggers:
+    - github:
+        secret: ${WEBHOOK_SECRET}
+      type: Github
+    - generic:
+        secret: ${WEBHOOK_SECRET}
+      type: Generic
+      runPolicy: Serial
+      source:
+        git:
+          uri: ${SOURCE_REPOSITORY_URL}
+          ref: ${SOURCE_REPOSITORY_REF}
+        contextDr: ${CONTEXT_DIR}
+        type: Git
+      strategy:
+        jenkinsPipelineStrategy:
+          jenkinsfilePath: ${JENKINS_FILE_PATH}
+parameters:
+- description: Source Repository URL
+  displayname: Git Repository URL
+  name: SOURCE_REPOSITORY_URL
+  required: true
+- description: Source Reference
+  displayname:  Git Reference
+  name: SOURCE_REPOSITORY_REF
+- description: Context Directory
+  displayname:  GContext Directory
+  name: CONTEXT_DIR
+- descrption: Jenkins File Path
+  displayname: Jenkins File Path
+  name: JENKINS_FILE_PATH
+  required: true
+- description: Webhook Wecret
+  name: WEBHOOK_SECRET
+  requiredd: true
+  generate: expression
+  from: '[a-zA-Z0-9]{8}'
