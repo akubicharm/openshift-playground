@@ -1,0 +1,3 @@
+---
+  - name: "Shell Command"
+    shell: "ssh ocpcluster-master-0 sudo oc get nodes"
