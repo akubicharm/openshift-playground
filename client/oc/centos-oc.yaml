@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: centos-oc
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+    labels:
+      app: centos-oc
+    name: centos-oc
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: docker.io/akubicharm/centos-oc
+      from:
+        kind: DockerImage
+        name: docker.io/akubicharm/centos-oc:latest
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+    labels:
+      app: centos-oc
+    name: centos-oc
+  spec:
+    replicas: 1
+    selector:
+      app: centos-oc
+      deploymentconfig: centos-oc
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+        labels:
+          app: centos-oc
+          deploymentconfig: centos-oc
+      spec:
+        containers:
+        - image: ' '
+          imagePullPolicy: Always
+          name: centos-oc
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/app-root/data
+            name: centos-oc-1
+          - mountPath: /opt/app-root/logs
+            name: centos-oc-2
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: centos-oc-1
+        - emptyDir: {}
+          name: centos-oc-2
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - centos-oc
+        from:
+          kind: ImageStreamTag
+          name: centos-oc:latest
